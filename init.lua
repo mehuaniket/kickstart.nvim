@@ -656,6 +656,7 @@ require('lazy').setup({
         'delve',
         'debugpy',
         'goimports',
+        'markdownlint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
