@@ -24,6 +24,7 @@ return {
     -- Add your own debuggers here
     'leoluz/nvim-dap-go',
     'mfussenegger/nvim-dap-python',
+    -- 'simrat39/rust-tools.nvim',
   },
   keys = function(_, keys)
     local dap = require 'dap'
@@ -50,6 +51,7 @@ return {
   config = function()
     local dap = require 'dap'
     local dapui = require 'dapui'
+    local mason_registry = require 'mason-registry'
 
     require('mason-nvim-dap').setup {
       -- Makes a best effort to setup the various debuggers with
@@ -58,14 +60,15 @@ return {
 
       -- You can provide additional configuration to the handlers,
       -- see mason-nvim-dap README for more information
-      handlers = {},
+      -- handlers = {},
 
       -- You'll need to check that you have the required things installed
       -- online, please don't ask me how to install them :)
       ensure_installed = {
         -- Update this to ensure that you have the debuggers for the langs you want
         'delve',
-        'python',
+        'debugpy',
+        -- 'codelldb',
       },
     }
 
@@ -95,17 +98,17 @@ return {
     dap.listeners.before.event_terminated['dapui_config'] = dapui.close
     dap.listeners.before.event_exited['dapui_config'] = dapui.close
 
-    -- Install golang specific config
+    -- Go DAP setup
     require('dap-go').setup {
       delve = {
-        -- On Windows delve must be run attached or it crashes.
-        -- See https://github.com/leoluz/nvim-dap-go/blob/main/README.md#configuring
+        initialize_timeout_sec = 20,
+        port = '${port}', -- Let Delve pick a random port
         detached = vim.fn.has 'win32' == 0,
       },
     }
 
-    -- uses the debugypy installation by mason
-    local debugpyPythonPath = require('mason-registry').get_package('debugpy'):get_install_path() .. '/venv/bin/python3'
-    require('dap-python').setup(debugpyPythonPath, {}) ---@diagnostic disable-line: missing-fields
+    -- Python DAP setup using debugpy
+    local debugpy_path = mason_registry.get_package('debugpy'):get_install_path() .. '/venv/bin/python3'
+    require('dap-python').setup(debugpy_path)
   end,
 }
