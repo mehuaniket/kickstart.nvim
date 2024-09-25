@@ -89,6 +89,7 @@ P.S. You can delete this when you're done too. It's your config now! :)
 --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.env.PATH = vim.env.PATH .. ':/usr/local/bin'
 
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -754,9 +755,20 @@ require('lazy').setup({
         -- Conform can also run multiple formatters sequentially
         python = { 'isort', 'black' },
         go = { 'goimports' },
+        tf = { 'tfmt' },
+        terraform = { 'tfmt' },
+        hcl = { 'tfmt' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      },
+      formatters = {
+        tfmt = {
+          -- Specify the command and its arguments for formatting
+          command = 'terraform',
+          args = { 'fmt', '-' },
+          stdin = true,
+        },
       },
     },
   },
