@@ -6,7 +6,10 @@ return {
     config = function()
       local lint = require 'lint'
       lint.linters_by_ft = {
-        markdown = { 'markdownlint' },
+        go = { 'golangcilint' }, -- Go linter using golangci-lint
+        python = { 'flake8' }, -- Python linter using flake8
+        terraform = { 'tflint' }, -- Terraform linter using tflint
+        markdown = { 'markdownlint' }, -- Markdown linter
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
