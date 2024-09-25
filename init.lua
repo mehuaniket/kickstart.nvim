@@ -328,7 +328,7 @@ require('lazy').setup({
         { '<leader>t', group = '[T]oggle' },
         { '<leader>g', group = 'Neo[G]it' },
         { '<leader>h', group = '[H]arpoon' },
-        { '<leader>v', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>v', group = 'Git Hunk', mode = { 'n', 'v' } },
       },
     },
   },
@@ -408,6 +408,11 @@ require('lazy').setup({
             '--glob',
             '!.git/*',
           },
+
+          file_ignore_patterns = {
+            'node_modules', -- Optionally ignore other directories
+            'venv',
+          },
         },
         -- pickers = {}
         extensions = {
@@ -424,9 +429,21 @@ require('lazy').setup({
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
+
+      -- Define the search function with hidden files and ignored patterns
+      local function search_files()
+        builtin.find_files {
+          hidden = true,
+          file_ignore_patterns = {
+            '.git/', -- Ignore the .git directory
+            'node_modules/', -- Ignore the node_modules directory
+          },
+        }
+      end
+
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
-      vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sf', search_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -634,6 +651,7 @@ require('lazy').setup({
         gopls = {},
         pyright = {},
         rust_analyzer = {},
+        tflint = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
         -- Some languages (like typescript) have entire language plugins that can be useful:
@@ -680,6 +698,7 @@ require('lazy').setup({
         'markdownlint',
         'helm-ls',
         'black',
+        'tflint',
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -923,7 +942,24 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'terraform', 'hcl', 'bash', 'python', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = {
+        'terraform',
+        'hcl',
+        'bash',
+        'python',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'rust',
+        'go',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
