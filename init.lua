@@ -934,16 +934,37 @@ require('lazy').setup({
     -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
     -- 'folke/tokyonight.nvim',
     'catppuccin/nvim',
+    name = 'catppuccin',
     priority = 1000, -- Make sure to load this before all the other start plugins.
-    init = function()
+    config = function()
       -- Load the colorscheme here.
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
+      require('catppuccin').setup(opts)
       vim.cmd.colorscheme 'catppuccin'
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'
     end,
+    opts = {
+      flavour = 'mocha',
+      integrations = {
+        treesitter = true,
+        lsp_trouble = true,
+        telescope = {
+          enabled = true,
+        },
+        neotree = true,
+        fidget = true,
+        indent_blankline = {
+          enabled = true,
+          scope_color = 'lavender',
+        },
+        cmp = true,
+        which_key = true,
+        gitsigns = true,
+      },
+    },
   },
 
   -- Highlight todo, notes, etc in comments
