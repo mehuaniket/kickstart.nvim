@@ -53,6 +53,21 @@ return {
           lint.try_lint()
         end,
       })
+
+      local diagnostics_active = true
+
+      local function toggle_diagnostics()
+        if diagnostics_active then
+          vim.diagnostic.disable()
+          print 'Diagnostics disabled'
+        else
+          vim.diagnostic.enable()
+          print 'Diagnostics enabled'
+        end
+        diagnostics_active = not diagnostics_active
+      end
+
+      vim.keymap.set('n', '<leader>cd', toggle_diagnostics, { desc = 'Toggle Diagnostic' })
     end,
   },
 }
