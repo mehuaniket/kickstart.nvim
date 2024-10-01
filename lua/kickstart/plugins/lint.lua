@@ -7,7 +7,7 @@ return {
       local lint = require 'lint'
       lint.linters_by_ft = {
         go = { 'golangcilint' }, -- Go linter using golangci-lint
-        python = { 'flake8' }, -- Python linter using flake8
+        python = { 'pylint' }, -- Python linter using flake8
         terraform = { 'tflint' }, -- Terraform linter using tflint
         markdown = { 'markdownlint' }, -- Markdown linter
       }

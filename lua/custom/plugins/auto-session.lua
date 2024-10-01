@@ -1,6 +1,7 @@
 return {
   'rmagatti/auto-session',
   lazy = false,
+  enabled = true,
 
   keys = {
     -- Will use Telescope if installed or a vim.ui.select picker otherwise
