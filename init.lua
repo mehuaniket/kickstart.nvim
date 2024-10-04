@@ -211,6 +211,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Create an autocommand to close Neotree when exiting Neovim
+vim.api.nvim_create_autocmd('VimLeavePre', {
+  desc = 'Automatically close Neotree before leaving Neovim',
+  group = vim.api.nvim_create_augroup('kickstart-neotree-close', { clear = true }),
+  command = 'Neotree close',
+})
+
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
@@ -651,7 +658,42 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         gopls = {},
-        pyright = {},
+        pyright = {
+          root_dir = function(fname)
+            local util = require 'lspconfig.util'
+            local root_files = {
+              'pyproject.toml',
+              'setup.py',
+              'setup.cfg',
+              'requirements.txt',
+              'Pipfile',
+              'manage.py',
+              'pyrightconfig.json',
+            }
+            return util.root_pattern(unpack(root_files))(fname) or util.root_pattern '.git'(fname) or util.path.dirname(fname)
+          end,
+          settings = {
+            pyright = {
+              disableLanguageServices = false,
+              disableOrganizeImports = false,
+            },
+            python = {
+              analysis = {
+                -- not sure if this is the right place for `exclude` or not tbh
+                exclude = {
+                  '**/node_modules',
+                  '**/__pycache__',
+                  'src/experimental',
+                  'src/typestubs',
+                },
+                autoSearchPaths = true,
+                diagnosticMode = 'workspace',
+                useLibraryCodeForTypes = true,
+              },
+            },
+          },
+          single_file_support = true,
+        },
         rust_analyzer = {},
         tflint = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
@@ -882,7 +924,7 @@ require('lazy').setup({
               luasnip.expand_or_jump()
             end
           end, { 'i', 's' }),
-          ['<C-h>'] = cmp.mapping(function()
+          ['<C-k>'] = cmp.mapping(function()
             if luasnip.locally_jumpable(-1) then
               luasnip.jump(-1)
             end
