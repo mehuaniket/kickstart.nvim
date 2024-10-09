@@ -211,6 +211,29 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+--- [[ formatter commands ]]
+-- Disable formatting for a particular buffer or globally
+vim.api.nvim_create_user_command('FormatDisable', function(args)
+  if args.bang then
+    -- FormatDisable! disables formatting for this buffer only
+    vim.b.disable_autoformat = true
+  else
+    -- FormatDisable disables formatting globally
+    vim.g.disable_autoformat = true
+  end
+end, {
+  desc = 'Disable autoformat-on-save',
+  bang = true,
+})
+
+-- Re-enable formatting for the current buffer or globally
+vim.api.nvim_create_user_command('FormatEnable', function()
+  vim.b.disable_autoformat = false
+  vim.g.disable_autoformat = false
+end, {
+  desc = 'Re-enable autoformat-on-save',
+})
+
 -- Create an autocommand to close Neotree when exiting Neovim
 vim.api.nvim_create_autocmd('VimLeavePre', {
   desc = 'Automatically close Neotree before leaving Neovim',
@@ -777,6 +800,8 @@ require('lazy').setup({
         'black', -- Python formatter
         'goimports', -- Go formatter
         'markdownlint', -- Markdown formatter
+        'fixjson', -- json formatter
+        'taplo', -- toml formatter
       }
 
       -- Define linters
@@ -841,12 +866,30 @@ require('lazy').setup({
     cmd = { 'ConformInfo' },
     keys = {
       {
-        '<leader>f',
+        '<leader>ff',
         function()
           require('conform').format { async = true, lsp_format = 'fallback' }
         end,
         mode = '',
         desc = '[F]ormat buffer',
+      },
+      -- Show Conform log
+      {
+        '<leader>fi',
+        '<Cmd>ConformInfo<CR>',
+        desc = 'Show Conform log',
+      },
+      -- Disable autoformat-on-save
+      {
+        '<leader>fd',
+        '<Cmd>FormatDisable<CR>',
+        desc = 'Disable autoformat-on-save',
+      },
+      -- Re-enable autoformat-on-save
+      {
+        '<leader>fe',
+        '<Cmd>FormatEnable<CR>',
+        desc = 'Re-enable autoformat-on-save',
       },
     },
     opts = {
@@ -855,9 +898,9 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true, yaml = true }
+        local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
-        if disable_filetypes[vim.bo[bufnr].filetype] then
+        if disable_filetypes[vim.bo[bufnr].filetype] or vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
           lsp_format_opt = 'never'
         else
           lsp_format_opt = 'fallback'
@@ -875,6 +918,10 @@ require('lazy').setup({
         tf = { 'tfmt' },
         terraform = { 'tfmt' },
         hcl = { 'tfmt' },
+        -- https://github.com/tamasfe/taplo
+        toml = { 'taplo' },
+        -- https://github.com/rhysd/fixjson
+        json = { 'fixjson' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
