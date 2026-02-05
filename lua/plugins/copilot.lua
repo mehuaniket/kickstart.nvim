@@ -1,6 +1,4 @@
 return {
-  -- Add other plugins here
-
   -- Add copilot.vim
   {
     'github/copilot.vim',
@@ -14,3 +12,4 @@ return {
     end,
   },
 }
+

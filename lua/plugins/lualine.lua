@@ -1,15 +1,5 @@
 return {
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    config = function()
-      require('catppuccin').setup {
-        flavour = 'mocha', -- You can set the flavor to 'mocha'
-      }
-      vim.cmd.colorscheme 'catppuccin' -- Set Catppuccin as the colorscheme
-    end,
-  },
-  {
     'nvim-lualine/lualine.nvim',
     opts = function()
       require('lualine').setup {
@@ -45,3 +35,4 @@ return {
     end,
   },
 }
+

@@ -38,8 +38,10 @@ External Requirements:
 
 ### Install Kickstart
 
+
 > **NOTE**
-> [Backup](#FAQ) your previous configuration (if any exists)
+
+ > [Backup](#FAQ) your previous configuration (if any exists)
 
 Neovim's configurations are located under the following paths, depending on your OS:
 

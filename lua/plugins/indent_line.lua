@@ -1,3 +1,4 @@
+-- Indentation guides (migrated from lua/kickstart/plugins/indent_line.lua)
 return {
   { -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
@@ -7,3 +8,4 @@ return {
     opts = {},
   },
 }
+
