@@ -108,8 +108,23 @@ return {
     { '<leader>gB', function() Snacks.gitbrowse() end, desc = 'Git Browse', mode = { 'n', 'v' } },
     { '<leader>gg', function() Snacks.lazygit() end, desc = 'Lazygit' },
     { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss All Notifications' },
-    { '<C-/>', function() Snacks.terminal() end, desc = 'Toggle Terminal' },
-    { '<C-_>', function() Snacks.terminal() end, desc = 'which_key_ignore' },
+    -- Floating terminal (Ctrl+/): works in normal + terminal modes
+    {
+      '<C-/>',
+      function()
+        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85 } })
+      end,
+      mode = { 'n', 't' },
+      desc = 'Toggle Floating Terminal',
+    },
+    {
+      '<C-_>',
+      function()
+        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85 } })
+      end,
+      mode = { 'n', 't' },
+      desc = 'which_key_ignore',
+    },
     { ']]', function() Snacks.words.jump(vim.v.count1) end, desc = 'Next Reference', mode = { 'n', 't' } },
     { '[[', function() Snacks.words.jump(-vim.v.count1) end, desc = 'Prev Reference', mode = { 'n', 't' } },
     {
