@@ -112,7 +112,7 @@ return {
     {
       '<C-/>',
       function()
-        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85 } })
+        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85, border = 'rounded' } })
       end,
       mode = { 'n', 't' },
       desc = 'Toggle Floating Terminal',
@@ -120,7 +120,7 @@ return {
     {
       '<C-_>',
       function()
-        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85 } })
+        Snacks.terminal(nil, { win = { position = 'float', width = 0.85, height = 0.85, border = 'rounded' } })
       end,
       mode = { 'n', 't' },
       desc = 'which_key_ignore',
